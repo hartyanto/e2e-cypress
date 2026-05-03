@@ -1,11 +1,12 @@
 describe('OrangeHRM Login Feature Testing', () => {
   beforeEach(() => {
     cy.visit('https://opensource-demo.orangehrmlive.com/web/index.php/auth/login');
+    cy.fixture('user').as('userData');
   });
 
-  it('Skenario Positif: Berhasil login dengan username dan password yang benar', () => {
-    cy.get('input[name="username"]').type('admin');
-    cy.get('input[name="password"]').type('admin123');
+  it('Skenario Positif: Berhasil login dengan username dan password yang benar', function() {
+    cy.get('input[name="username"]').type(this.userData.validUser.username);
+    cy.get('input[name="password"]').type(this.userData.validUser.password);
     cy.get('button[type="submit"]').click();
 
     cy.url().should('include', '/dashboard/index');
@@ -14,9 +15,9 @@ describe('OrangeHRM Login Feature Testing', () => {
       .and('have.text', 'Dashboard');
   });
 
-  it('Skenario Negatif: Gagal login (username salah & password benar)', () => {
-    cy.get('input[name="username"]').type('admon');
-    cy.get('input[name="password"]').type('admin123');
+  it('Skenario Negatif: Gagal login (username salah & password benar)', function() {
+    cy.get('input[name="username"]').type(this.userData.invalidPassword.username);
+    cy.get('input[name="password"]').type(this.userData.invalidPassword.password);
     cy.get('button[type="submit"]').click();
 
     cy.get('.oxd-alert-content-text')
@@ -24,9 +25,9 @@ describe('OrangeHRM Login Feature Testing', () => {
       .and('have.text', 'Invalid credentials');
   });
 
-  it('Skenario Negatif: Gagal login (username benar & password salah)', () => {
-    cy.get('input[name="username"]').type('admin');
-    cy.get('input[name="password"]').type('admin1234');
+  it('Skenario Negatif: Gagal login (username benar & password salah)', function() {
+    cy.get('input[name="username"]').type(this.userData.invalidUsername.username);
+    cy.get('input[name="password"]').type(this.userData.invalidUsername.password);
     cy.get('button[type="submit"]').click();
 
     cy.get('.oxd-alert-content-text')
@@ -34,9 +35,19 @@ describe('OrangeHRM Login Feature Testing', () => {
       .and('have.text', 'Invalid credentials');
   });
 
-  it('Skenario Negatif: Username tidak diisi', () => {
+  it('Skenario Negatif: Password salah (case sensitive)', function() {
+    cy.get('input[name="username"]').type(this.userData.passwordCaseSensitive.username);
+    cy.get('input[name="password"]').type(this.userData.passwordCaseSensitive.password);
+    cy.get('button[type="submit"]').click();
+
+    cy.get('.oxd-alert-content-text')
+      .should('be.visible')
+      .and('have.text', 'Invalid credentials');
+  });
+
+  it('Skenario Negatif: Username tidak diisi', function() {
     cy.get('input[name="username"]').clear();
-    cy.get('input[name="password"]').type('admin123');
+    cy.get('input[name="password"]').type(this.userData.validUser.password);
     cy.get('button[type="submit"]').click();
 
     cy.contains('.oxd-input-group', 'Username')
@@ -45,8 +56,8 @@ describe('OrangeHRM Login Feature Testing', () => {
       .and('have.text', 'Required');
   });
 
-  it('Skenario Negatif: Password tidak diisi', () => {
-    cy.get('input[name="username"]').type('admin');
+  it('Skenario Negatif: Password tidak diisi', function() {
+    cy.get('input[name="username"]').type(this.userData.validUser.username);
     cy.get('input[name="password"]').clear();
     cy.get('button[type="submit"]').click();
 
@@ -56,7 +67,7 @@ describe('OrangeHRM Login Feature Testing', () => {
       .and('have.text', 'Required');
   });
 
-  it('Skenario Negatif: Username & Password tidak diisi', () => {
+  it('Skenario Negatif: Username & Password tidak diisi', function() {
     cy.get('input[name="username"]').clear();
     cy.get('input[name="password"]').clear();
     cy.get('button[type="submit"]').click();
@@ -77,7 +88,9 @@ describe('OrangeHRM Login Feature Testing', () => {
 
 describe('OrangeHRM Login Feature Testing', () => {
   beforeEach(() => {
-    cy.loginSession('Admin', 'admin123');
+    cy.fixture('user').then((user) => {
+      cy.loginSession(user.validUser.username, user.validUser.password);
+    })
     cy.visit('https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index');
     cy.intercept('GET', '**/dashboard/**').as('getDashboardData');
     cy.wait('@getDashboardData', { timeout: 15000 });
@@ -94,3 +107,13 @@ describe('OrangeHRM Login Feature Testing', () => {
       .and('contain', 'Login');
   });
 })
+
+describe('Access Control Testing', () => {
+  it('Skenario Negatif: Mengakses Dashboard tanpa Login (Direct URL)', () => {
+    cy.visit('https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index', { failOnStatusCode: false });
+    cy.url().should('include', '/auth/login');
+    cy.get('.oxd-topbar-header-breadcrumb-module').should('not.exist');
+    cy.get('input[name="username"]').should('be.visible');
+    cy.get('.orangehrm-login-slot').should('contain', 'Login');
+  });
+});
