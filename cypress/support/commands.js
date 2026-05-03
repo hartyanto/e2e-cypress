@@ -23,3 +23,24 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('loginSession', (username, password) => {
+  cy.session([username, password], () => {
+        cy.visit('https://opensource-demo.orangehrmlive.com/web/index.php/auth/login');
+        cy.get('input[name="username"]').type(username);
+        cy.get('input[name="password"]').type(password);
+        cy.get('button[type="submit"]').click();
+        cy.url().should('include', '/dashboard');
+        cy.get('.oxd-sidepanel').should('be.visible');
+    },
+    {
+        validate() {
+            cy.getCookie('orangehrm').should('exist');
+            cy.request({
+                url: '/web/index.php/api/v2/dashboard/employees/locations',
+                failOnStatusCode: false
+            }).its('status').should('eq', 200);
+        },
+        cacheAcrossSpecs: true
+    });
+})
