@@ -1,0 +1,33 @@
+{
+    "newCategories": [
+        {
+            "name": "Baju Olahraga",
+            "image": "https://placeimg.com/640/480/any"
+        },
+        {
+            "name": "Sepatu Olahraga",
+            "image": "https://placeimg.com/640/480/any"
+        },
+        {
+            "name": "Jaket Gunung",
+            "image": "https://placeimg.com/640/480/any"
+        }
+    ],
+    "udpateCategories": [
+        {
+            "name": "Baju Olahraga",
+            "new_name": "Baju Olahraga Wanita",
+            "image": "https://placeimg.com/640/480/any"
+        },
+        {
+            "name": "Sepatu Olahraga",
+            "new_name": "Sepatu Olahraga Laki-Laki",
+            "image": "https://placeimg.com/640/480/any"
+        },
+        {
+            "name": "Jaket Gunung",
+            "new_name": "Jaket Gunung Unisex",
+            "image": "https://placeimg.com/640/480/any"
+        }
+    ]
+}
