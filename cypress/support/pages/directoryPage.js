@@ -11,6 +11,11 @@ class directoryPage {
         getDropdownOption: (text) => cy.get('.oxd-select-dropdown').contains('span', text),
         getLoader: () => cy.get('.orangehrm-container-loader'),
         getLocationDropdown: () => cy.get('.oxd-select-text').eq(1),
+        getNoRecordMessage: () => cy.get('.orangehrm-paper-container'),
+        getToastBottom: () => cy.get('.oxd-toast-container'),
+        getHideFilterSection: () => cy.get('.oxd-table-filter-header-options'),
+        getSidebarUserDetail: () => cy.get('.orangehrm-corporate-directory-sidebar'),
+        getSidebarArrowRight: () => this.elements.getSidebarUserDetail().find('.bi-arrow-right')
     }
 
     visit() {

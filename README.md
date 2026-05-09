@@ -30,3 +30,16 @@ Untuk menjalankan reqres dengan apikey mohon buat file cypress.env.json pada roo
         "api_key": "your_free_reqres_apikey"
     }
 }
+
+Jika pada Final Project, bagian directory banyak error karena userValid tidak ditemukan (data selalu berubah), mohon dapat disesuaikan pada fixtures -> user.json di bagian : 
+
+"directorySearch": {
+    "validUser": {
+      "hint": "Peter",
+      "fullName": "Peter Mac Anderson",
+      "jobTitle": "Chief Financial Officer",
+      "location": "New York Sales Office"
+    },
+    ...
+  }
+

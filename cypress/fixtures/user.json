@@ -19,9 +19,12 @@
     "username": "orange"
   },
   "directorySearch": {
-    "validHint": "Peter",
-    "validFullName": "Peter Mac Anderson",
-    "validJobTitle": "Chief Financial Officer",
-    "validLocation": "New York Sales Office"
+    "validUser": {
+      "hint": "Peter",
+      "fullName": "Peter Mac Anderson",
+      "jobTitle": "Chief Financial Officer",
+      "location": "New York Sales Office"
+    },
+    "jobTitle": "Software Engineer"
   }
 }
