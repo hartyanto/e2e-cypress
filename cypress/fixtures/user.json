@@ -14,5 +14,14 @@
   "passwordCaseSensitive": {
     "username": "admin",
     "password": "Admin123"
+  },
+  "resetPassword": {
+    "username": "orange"
+  },
+  "directorySearch": {
+    "validHint": "Peter",
+    "validFullName": "Peter Mac Anderson",
+    "validJobTitle": "Chief Financial Officer",
+    "validLocation": "New York Sales Office"
   }
 }
